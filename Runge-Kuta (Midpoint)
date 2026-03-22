@@ -1,0 +1,57 @@
+%% Runge-Kuta (Midpoint)
+clc;clear all;close all;
+% Name: 許致瑋            Number: 411231223
+
+
+% #Exercise2.Use Runge-Kuta (Midpoint) method to approximate the solutions for each of
+%  the following initial-value problems.
+%                  y'=e^(t-y), 0<=t<=1, y(0)=1, with h=0.1
+%_______________________________________________________________________
+% #5.2.4
+%      The actual solutions to the initial-value problemsin Exercise2 are
+%      given here. Compute the actual error and compare this to the error
+%      bound if Thm5.9 can be applied.
+
+%  (a)  y(t)=ln(e^t+e-1)
+%sol.
+
+f=@(t,y) exp(t-y);
+g=@(t) log(exp(t)+exp(1)-1);
+
+a=0;
+b=1;
+y0=1;
+h=0.1;
+n=(b-a)/h;
+w=y0;
+d=y0;
+e=y0;
+t=a;
+
+fprintf('\n')
+disp('   Runge-Kuta (Midpoint) method')
+disp('_______________________________________________________________________________________________________________________')
+disp(['    ti        yi        Midpoint       error     Mod Euler     error       Heun         error   '])
+disp('______________________________________________________________________________________________________________________')
+fprintf('\n')
+fprintf('%8.2f %12.6f %11.6f\n',a,w,g(a))
+for i=1:n
+    %Midpoint
+    w= w+h*f(t+h/2,w+(h/2)*f(t,w));
+    t= t+h;
+    err1= abs(g(t)-w);
+
+    %MOD EULER
+    d = w+h/2*(f(t,d)+f(t+h,d*h*f(t,d)));
+    err2= abs(g(t)-d);
+
+    %HEUN
+    e = e + h/4+(f(t,e)+3*f(t+2*h/3,e+2*h*f(t,w)/3));
+    err3= abs(g(t)-e);
+
+    fprintf('%8.2f %12.6f %11.6f %11.2e %11.6f %11.2e %11.6f %11.2e\n',t,g(t),w,err1,d,err2,e,err3)  
+end
+fprintf('\n')
+fprintf('with Midpoint method, answer is %12.6f\n',w);
+fprintf('with Mod Euler method, answer is %12.6f\n',d);
+fprintf('with Heun method, answer is %12.6f\n',e);
